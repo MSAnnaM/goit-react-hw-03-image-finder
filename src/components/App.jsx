@@ -38,7 +38,6 @@ export class App extends React.Component {
     }
   };
   submitForm = newSearch => {
-    const { q } = this.state;
     this.setState({q: newSearch})
   };
   render() {
