@@ -57,7 +57,7 @@ export class App extends React.Component {
     }
   };
   submitForm = newSearch => {
-    this.setState(() => ({ images: [], q: newSearch }));
+    this.setState(() => ({ images: [], q: newSearch, page: 1, }));
   };
 
   onLoadMore = () => {
