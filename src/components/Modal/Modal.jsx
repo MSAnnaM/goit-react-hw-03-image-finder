@@ -25,7 +25,7 @@ export class Modal extends React.Component {
     return (
       <div className={styles.Overlay} onClick={this.handleOverlayClose}>
         <div className={styles.Modal}>
-          <img src={image} />
+          <img src={image} alt=""/>
         </div>
       </div>
     );
