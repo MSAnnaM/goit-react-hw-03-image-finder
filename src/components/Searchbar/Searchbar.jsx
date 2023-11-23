@@ -16,12 +16,11 @@ export class Searchbar extends React.Component {
     e.preventDefault();
     const { q } = this.state;
     if (!q.trim()) {
-      Notiflix.Notify.warning('Please write your name and number');
+      Notiflix.Notify.warning('Please, enter your request');
       return;
     }
     this.props.onSubmit({ q });
-    this.setState({q: '',})
-    console.log(this.state);
+    this.setState({ q: '' });
   };
 
   render() {
@@ -34,6 +33,7 @@ export class Searchbar extends React.Component {
 
           <input
             className={styles.form_input}
+            value={this.state.q}
             type="text"
             autoComplete="off"
             autoFocus

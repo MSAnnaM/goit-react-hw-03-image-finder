@@ -1,11 +1,20 @@
 import React from 'react';
-import styles from './App.module.css'
+import Notiflix from 'notiflix';
+import styles from './App.module.css';
 import { fetchImage } from 'services/api';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
+Notiflix.Notify.init({
+  timeout: 5000,
+  clickToClose: true,
+  cssAnimationStyle: 'from-bottom',
+  width: '400px',
+  fontSize: '18px',
+  fontAwesomeIconStyle: 'shadow',
+});
 
 export class App extends React.Component {
   state = {
@@ -18,7 +27,7 @@ export class App extends React.Component {
     isLoading: false,
   };
   componentDidUpdate(_, prevState) {
-    if ( this.state.page !== prevState.page || prevState.q !== this.state.q) {
+    if (this.state.page !== prevState.page || prevState.q !== this.state.q) {
       this.getImage();
     }
   }
@@ -27,54 +36,53 @@ export class App extends React.Component {
     const { q, page } = this.state;
     try {
       this.setState({
-        isLoading:true,
-      })
-      console.log('Fetching images for:', q, 'on page:', page);
+        isLoading: true,
+      });
       const customerImages = await fetchImage(q, page);
-       console.log('Fetched images:', customerImages);
-      this.setState((prevState) => ({
+      if (!customerImages.hits.length) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      }
+      this.setState(prevState => ({
         images: [...prevState.images, ...customerImages.hits],
-        page: prevState.page + 1,
-        loadMore: page < Math.ceil(customerImages.totalHits / 12)
-      }))
+        loadMore: page < Math.ceil(customerImages.totalHits / 12),
+      }));
     } catch (error) {
-      console.error(error);
-
+      Notiflix.Notify.failure(
+        'Oops! Something went wrong! Try reloading the page!'
+      );
     } finally {
       this.setState({ isLoading: false });
-      console.log(this.state.page);
-      console.log(this.state.loadMore);
-
     }
   };
   submitForm = newSearch => {
-    this.setState({q: newSearch})
+    this.setState({ q: newSearch }, () => {
+      this.setState({ images: [] });
+    });
   };
 
-  onLoadMore = (prevState) => {
+  onLoadMore = () => {
     if (this.state.loadMore) {
-      this.getImage();
-      this.setState({page: prevState.page +1})
+      this.setState(prevState => ({ page: prevState.page + 1 }));
     }
-  }
-  imageOnClick = (selectedImg) => {
-    console.log(selectedImg);
+  };
+  imageOnClick = selectedImg => {
     this.setState({
       modal: true,
       selectedImg: selectedImg,
-    })
-  }
+    });
+  };
 
   closeModal = () => {
-    this.setState({modal: false, selectedImg: '',})
-  }
+    this.setState({ modal: false, selectedImg: '' });
+  };
   render() {
     const { isLoading, loadMore, modal, selectedImg } = this.state;
     return (
       <div className={styles.App}>
-        
         <Searchbar onSubmit={this.submitForm} />
-         {isLoading && <Loader />}
+        {isLoading && <Loader />}
         <ImageGallery images={this.state.images} onClick={this.imageOnClick} />
         {loadMore && <Button onClick={this.onLoadMore} />}
         {modal && <Modal image={selectedImg} onClose={this.closeModal} />}
