@@ -63,9 +63,7 @@ export class App extends React.Component {
   };
 
   onLoadMore = () => {
-    if (this.state.loadMore) {
       this.setState(prevState => ({ page: prevState.page + 1 }));
-    }
   };
   imageOnClick = selectedImg => {
     this.setState({
