@@ -6,13 +6,13 @@ export class ImageGallery extends React.Component {
 
 
     render() {
-        const { images } = this.props;
+        const { images, onClick } = this.props;
         
         return (
         <ul className={styles.gallary}>
-            {console.log(images)}
-            {images.map(({id, pageURL, tags}) => (
-                <ImageGalleryItem key={id} image={pageURL} alt={tags} />
+            {images.map(({id, webformatURL, tags, largeImageURL}) => (
+                <ImageGalleryItem key={id} image={webformatURL} alt={tags} onClick={onClick} forModal={largeImageURL} />
+                
             ))}
 
     </ul>)

@@ -10,7 +10,6 @@ export class Searchbar extends React.Component {
     this.setState({
       q: e.currentTarget.value.toLowerCase(),
     });
-    console.log(this.state);
   };
 
   handelSubmit = e => {
@@ -20,8 +19,9 @@ export class Searchbar extends React.Component {
       Notiflix.Notify.warning('Please write your name and number');
       return;
     }
-    this.props.onSubmit({q});
-    this.setState({ q: '' });
+    this.props.onSubmit({ q });
+    this.setState({q: '',})
+    console.log(this.state);
   };
 
   render() {
