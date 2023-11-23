@@ -57,13 +57,11 @@ export class App extends React.Component {
     }
   };
   submitForm = newSearch => {
-    this.setState({ q: newSearch }, () => {
-      this.setState({ images: [] });
-    });
+    this.setState(() => ({ images: [], q: newSearch }));
   };
 
   onLoadMore = () => {
-      this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
   imageOnClick = selectedImg => {
     this.setState({
