@@ -18,7 +18,7 @@ export class App extends React.Component {
     isLoading: false,
   };
   componentDidUpdate(_, prevState) {
-    if (prevState.q !== this.state.q) {
+    if ( this.state.page !== prevState.page || prevState.q !== this.state.q) {
       this.getImage();
     }
   }
@@ -51,9 +51,10 @@ export class App extends React.Component {
     this.setState({q: newSearch})
   };
 
-  onLoadMore = () => {
+  onLoadMore = (prevState) => {
     if (this.state.loadMore) {
       this.getImage();
+      this.setState({page: prevState.page +1})
     }
   }
   imageOnClick = (selectedImg) => {
